@@ -1,0 +1,66 @@
+<mat-card>
+    <mat-card-content>
+      <form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
+        <h2>Create Contract</h2>
+        <mat-error *ngIf="registerInvalid">
+          Issue creating contract
+        </mat-error>
+        <mat-form-field class="full-width-input">
+            <input matInput placeholder="contract no" formControlName="contract_no" required>
+            <mat-error>
+              Please provide a valid contract no
+            </mat-error>
+          </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input matInput placeholder="Purchase of" formControlName="title" required>
+          <mat-error>
+            Please provide a valid title for contract
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Purchaser:</mat-label>
+            <mat-select formControlName="contract_entity_purchaser_id">
+              <mat-option *ngFor="let ce of contract_entities" [value]="ce.id">
+                {{ce.entity_name}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Supplier:</mat-label>
+            <mat-select formControlName="contract_entity_supplier_id">
+              <mat-option *ngFor="let ce of contract_entities" [value]="ce.id">
+                {{ce.entity_name}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-chip-list" appearance="fill">
+            <mat-label>Products</mat-label>
+            <mat-chip-list #chipList aria-label="Product selection">
+              <mat-chip
+                *ngFor="let product of _products"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(product)">
+                {{product}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input
+                placeholder="New product..."
+                #productInput
+                [formControl]="productCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+                {{product}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        <button mat-raised-button color="accent">INITIATE CONTRACT</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+

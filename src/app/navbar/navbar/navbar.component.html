@@ -1,0 +1,37 @@
+<p>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>Contract Approval</span>
+        <span class="my-spacer"></span>
+        <div *ngIf="!currentUser">
+            <button (click)="redirectLoginPage()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                Login
+            </button>
+        </div>
+        </mat-toolbar-row>
+        <mat-toolbar-row *ngIf="currentUser">
+            <span>{{this.currentUser.user_data.email}} | {{this.currentUser.user_data.role_name}}</span>
+            <span class="my-spacer"></span>
+            <div style="display: flex; padding: 5px; justify-content: space-between;">
+                <button (click)="goToDashboard()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Dashboard
+                </button>
+                <span style="padding: 25px;"></span>
+                <button (click)="goToTenders()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Tenders
+                </button>
+                <span style="padding: 25px;"></span>
+                <button (click)="goToEntities()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Entity
+                </button>
+                <span style="padding: 25px;"></span>
+                <button (click)="logoutUser()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Logout
+                </button>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+  </p>

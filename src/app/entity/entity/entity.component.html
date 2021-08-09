@@ -1,0 +1,27 @@
+<div style="display:flex; justify-content: space-between; margin: 5px;">
+    <h4 class="card-header">Available Entities:</h4>
+    <button mat-raised-button (click)="redirectToEntityCreate()" color="accent" *ngIf="+currentUser.user_data.role_id == 1">
+        Create Entity
+    </button>
+</div>
+
+<table mat-table [dataSource]="entities" class="mat-elevation-z8" color="basic">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+    <!-- contract no Column -->
+    <ng-container matColumnDef="entity_name">
+      <th mat-header-cell *matHeaderCellDef> Entity Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.entity_name}} </td>
+    </ng-container>
+  
+    <!-- description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Entity Description </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>      

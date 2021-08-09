@@ -1,0 +1,23 @@
+<mat-card>
+    <mat-card-content>
+      <form [formGroup]="tenderForm" (ngSubmit)="onSubmit()">
+        <h2>Create Tender</h2>
+        <mat-error *ngIf="tenderInvalid">
+          Issue creating tender
+        </mat-error>
+        <mat-form-field class="full-width-input">
+            <input matInput placeholder="Tender Title" formControlName="title" required>
+            <mat-error>
+              Please provide a valid tender title
+            </mat-error>
+          </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <input matInput placeholder="Tender Description" formControlName="description" required>
+          <mat-error>
+            Please provide a valid Description
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="accent">Create Tender</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
