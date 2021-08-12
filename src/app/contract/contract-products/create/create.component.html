@@ -1,0 +1,60 @@
+<div style="display:flex; justify-content: space-between; margin: 5px;">
+    <h4 class="card-header">Available Products:</h4>
+    <button mat-raised-button (click)="redirectToProductCreate()" color="accent" >
+        Create New Product
+    </button>
+</div>
+
+<table mat-table [dataSource]="products" class="mat-elevation-z8" color="basic">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+    <!-- proudct id  Column -->
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Product Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+  
+      
+    <!-- product name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Product Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+  
+    <!-- price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Product Price </th>
+      <td mat-cell *matCellDef="let element"> {{element.price | currency:'KES'}} </td>
+    </ng-container>
+  
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element" class="action-link"> 
+        <a mat-button (click)="redirectToProductCreate()" color="primary">Add To Contract</a>   
+        </td>
+  </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr 
+        mat-row 
+        (click)="openDialog(row)"
+        *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>  
+
+<div>
+    <h3>
+      Added Products:
+    </h3>
+</div>
+  
+<ul>
+    <li *ngFor="let clickedRow of clickedRows">
+        product: {{clickedRow.name}}  quantity: {{clickedRow.quantity}} 
+    </li>
+</ul>
+
+<button mat-raised-button (click)="submitContractProducts()" color="accent" >
+    Submit Products
+</button>

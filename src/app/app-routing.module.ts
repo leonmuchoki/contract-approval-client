@@ -10,6 +10,8 @@ import { TenderCreateComponent } from './tenders/tender-create/tender-create.com
 import { TenderComponent } from './tenders/tender/tender.component';
 import { EntityComponent } from './entity/entity/entity.component';
 import { CreateEntityComponent } from './entity/create-entity/create-entity.component';
+import { CreateClauseComponent } from './contract/contract-clauses/create-clause/create-clause.component';
+import { CreateComponent } from './contract/contract-products/create/create.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,11 +19,13 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'contract', component: ContractComponent },
-  { path: 'contract_create', component: ContractCreateComponent },
-  { path: 'tender_create', component: TenderCreateComponent },
+  { path: 'contract/create', component: ContractCreateComponent },
+  { path: 'tender/create', component: TenderCreateComponent },
   { path: 'tenders', component: TenderComponent },
   { path: 'entity', component: EntityComponent },
-  { path: 'entity_create', component: CreateEntityComponent },
+  { path: 'entity/create', component: CreateEntityComponent },
+  { path: 'clause/create', component: CreateClauseComponent },
+  { path: 'contract/products/create/:contract_id', component: CreateComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 

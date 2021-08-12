@@ -41,7 +41,7 @@ export class EntityComponent implements OnInit {
   }
 
   redirectToEntityCreate(): void {
-    this.router.navigateByUrl('/entity_create');
+    this.router.navigateByUrl('/entity/create');
   }
 
 }

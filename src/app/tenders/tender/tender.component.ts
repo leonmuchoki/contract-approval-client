@@ -41,6 +41,6 @@ export class TenderComponent implements OnInit {
   }
 
   redirectToTenderCreate(): void {
-    this.router.navigateByUrl('/tender_create');
+    this.router.navigateByUrl('/tender/create');
   }
 }

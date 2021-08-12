@@ -19,6 +19,9 @@ import { TenderCreateComponent } from './tenders/tender-create/tender-create.com
 import { TenderComponent } from './tenders/tender/tender.component';
 import { CreateEntityComponent } from './entity/create-entity/create-entity.component';
 import { EntityComponent } from './entity/entity/entity.component';
+import { CreateClauseComponent } from './contract/contract-clauses/create-clause/create-clause.component';
+import { CreateComponent } from './contract/contract-products/create/create.component';
+import { DialogAddQuantityDialogComponent } from './contract/contract-products/create/dialog-add-quantity-dialog/dialog-add-quantity-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { EntityComponent } from './entity/entity/entity.component';
     TenderCreateComponent,
     TenderComponent,
     CreateEntityComponent,
-    EntityComponent
+    EntityComponent,
+    CreateClauseComponent,
+    CreateComponent,
+    DialogAddQuantityDialogComponent
   ],
   imports: [
     BrowserModule,

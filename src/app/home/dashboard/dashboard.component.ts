@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { DateTime } from 'luxon';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -20,7 +21,7 @@ export class DashboardComponent implements OnInit {
   users: User[];
   currentUser: User;
 
-  displayedColumns: string[] = ['contract_no', 'title', 'purchaser', 'supplier','action'];
+  displayedColumns: string[] = ['contract_no', 'title', 'purchaser', 'supplier','created_at','action'];
 
   constructor(
     private userService: UserService, 
@@ -36,29 +37,34 @@ export class DashboardComponent implements OnInit {
       this.userService.getAll().pipe(first()).subscribe(users => {
           this.loading = false;
           this.users = users;
-          console.log('users::' + JSON.stringify(users))
+          //console.log('users::' + JSON.stringify(users))
       });
-      console.log('Dashboard::currentUser::' + JSON.stringify(this.currentUser));
+      //console.log('Dashboard::currentUser::' + JSON.stringify(this.currentUser));
 
       this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {
         this.loading = false;
         this.contracts = contracts.map((c) => {
           return {
+            id: c?.id,
             contract_no: c?.contract_no,
             title: c?.title,
             purchaser: c?.contract_entity_purchaser?.entity_name,
-            supplier: c?.contract_entity_supplier?.entity_name
+            supplier: c?.contract_entity_supplier?.entity_name,
+            created_at: c?.created_at//.toLocaleString(DateTime.DATE_MED)
           }
         });
-        console.log('contracts::' + JSON.stringify(this.contracts))
+        //console.log('contracts::' + JSON.stringify(this.contracts));
     });
   }
 
   redirectToContractCreate() : void {
-    this.router.navigateByUrl('/contract_create');
+    this.router.navigateByUrl('/contract/create');
   }
 
-  redirectToAddContractProducts(): void {}
+  redirectToAddContractProducts(element): void {
+    console.log('clickedRow::' + JSON.stringify(element));
+    this.router.navigateByUrl(`/contract/products/create/${element.id}`);
+  }
 
   redirectToAddContractClauses(): void {}
 }
