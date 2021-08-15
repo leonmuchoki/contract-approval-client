@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 
 import { Tender } from 'src/app/models/tender';
 import { TenderService } from 'src/app/services/tender.service';
+import { J } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-tender-create',
@@ -50,13 +51,22 @@ export class TenderCreateComponent implements OnInit {
     }
 
     this.loading = true;
-    this.tenderService.addTender(this.f.title.value,this.f.description.value)
+
+    let tender_data = new Tender();
+    tender_data.title = this.f.title.value;
+    tender_data.description = this.f.description.value;
+    
+    this.tenderService.addTender(tender_data)
       .pipe(first())
       .subscribe(
           data => {
               this.router.navigate(['/tenders']);
           },
           error => {
+              if(error?.error?.message.includes('Invalid token')) {
+                this.router.navigate(['/login']);
+              }
+            console.error('tender create: ' + JSON.stringify(error));
               this.error = error;
               this.loading = false;
           });

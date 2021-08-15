@@ -2,19 +2,32 @@
     <mat-card-content>
       <form [formGroup]="contractForm" (ngSubmit)="onSubmit()">
         <h2>Create Contract</h2>
-        <mat-error *ngIf="registerInvalid">
+        <mat-error *ngIf="contractInvalid">
           Issue creating contract
         </mat-error>
         <mat-form-field class="full-width-input">
-            <input matInput placeholder="contract no" formControlName="contract_no" required>
+            <input matInput placeholder="contract no" formControlName="contract_no">
             <mat-error>
               Please provide a valid contract no
             </mat-error>
-          </mat-form-field>
-        <mat-form-field class="full-width-input">
-          <input matInput placeholder="Purchase of" formControlName="title" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Contract Type</mat-label>
+          <mat-select formControlName="contract_type_id">
+            <mat-option *ngFor="let contract_type of contract_types" [value]="contract_type.id">
+              {{contract_type.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Procurement of</mat-label>
+          <mat-select formControlName="title">
+            <mat-option *ngFor="let tender of tenders" [value]="tender.title">
+              {{tender.title}}
+            </mat-option>
+          </mat-select>
           <mat-error>
-            Please provide a valid title for contract
+            Please select a valid title for contract
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">

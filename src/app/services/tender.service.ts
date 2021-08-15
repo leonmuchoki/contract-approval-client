@@ -17,8 +17,8 @@ export class TenderService {
       return this.http.get<Tender[]>(`${this.baseUrl}/tenders/`);
   }
 
-  addTender(title: string, description: string) {
-    return this.http.post<any>(`${this.baseUrl}/tenders/`, { title, description })
+  addTender(tender_data: Tender) {
+    return this.http.post<any>(`${this.baseUrl}/tenders/`, tender_data)
         .pipe(map(tender => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             

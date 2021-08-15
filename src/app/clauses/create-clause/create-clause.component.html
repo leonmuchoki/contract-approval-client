@@ -1,0 +1,26 @@
+<mat-card>
+    <mat-card-content>
+      <form [formGroup]="clauseForm" (ngSubmit)="onSubmit()">
+        <h2>Create Clause</h2>
+        <mat-error *ngIf="clauseInvalid">
+          Issue creating clause
+        </mat-error>
+        <mat-form-field appearance="fill">
+          <mat-label>Contract Type</mat-label>
+          <mat-select formControlName="contract_type_id">
+            <mat-option *ngFor="let contract_type of contract_types" [value]="contract_type.id">
+              {{contract_type.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+            <input matInput placeholder="Clause Title " formControlName="clause_title" required>
+            <mat-error>
+                Please provide a valid clause title
+            </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="accent">Create Clause</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+

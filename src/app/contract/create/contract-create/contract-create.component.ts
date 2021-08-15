@@ -11,8 +11,10 @@ import {map, startWith} from 'rxjs/operators';
 import { ContractService } from 'src/app/services/contract.service';
 import { ProductService } from 'src/app/services/product.service';
 import { EntityService } from 'src/app/services/entity.service';
-import { ContractEntity } from 'src/app/models/contract';
+import { TenderService } from 'src/app/services/tender.service';
+import { Contract, ContractEntity, ContractType } from 'src/app/models/contract';
 import { Product } from 'src/app/models/product';
+import { Tender } from 'src/app/models/tender';
 
 @Component({
   selector: 'app-contract-create',
@@ -22,9 +24,11 @@ import { Product } from 'src/app/models/product';
 export class ContractCreateComponent implements OnInit {
 
   loading = false;
+  contract_types: ContractType[];
   contract_entities: ContractEntity[];
   products: Product[];
-  public registerInvalid = false;
+  tenders: Tender[];
+  public contractInvalid = false;
   contractForm: FormGroup;
   submitted = false;
   returnUrl: string;
@@ -36,40 +40,57 @@ export class ContractCreateComponent implements OnInit {
   _products: string[] = ['test'];
   filteredProducts: Observable<string[]>;
   allProducts: string[];
+  contract_no: string;
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
 
   constructor(
     private contractService: ContractService,
     private productService: ProductService,
+    private tenderService: TenderService,
+    private entityService: EntityService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private entityService: EntityService
+    private router: Router
   ) {
   }
 
   ngOnInit(): void {
     this.loading = true;
     this.entityService.getAllEntities().pipe(first()).subscribe(entities => {
-        this.loading = false;
+        //this.loading = false;
         this.contract_entities = entities;
-        console.log('contract_entities::' + JSON.stringify(entities))
+        //console.log('contract_entities::' + JSON.stringify(entities))
     }); 
+
+    this.contractService.getContractTypes().pipe(first()).subscribe(res => {
+      this.loading = false;
+      this.contract_types = res;
+      console.log('contract_types::' + JSON.stringify(res))
+    });
 
     this.productService.getAllProducts().pipe(first()).subscribe(products => {
-      this.loading = false;
       this.products = products;
       this.allProducts = products.map((p) => p.name);
-      console.log('products::' + JSON.stringify(this.allProducts))
+      //console.log('products::' + JSON.stringify(this.allProducts))
     }); 
 
+    this.tenderService.getAllTenders().pipe(first()).subscribe(tenders => {
+      this.loading = false;
+      this.tenders = tenders;
+    }); 
+    
+    let currYear = new Date().getFullYear();
+    let randomNo = Math.floor(1000 + Math.random() * 9000);
+    this.contract_no = `KEMSA/RT${randomNo}/${currYear} - ${currYear+1}`
+
     this.contractForm = this.formBuilder.group({
-      contract_no: ['', Validators.required],
+      contract_no: [{value: this.contract_no, disabled: true},  Validators.required],
       title: ['', Validators.required],
       contract_entity_purchaser_id: ['', Validators.required],
       contract_entity_supplier_id: ['', Validators.required],
-      products: ['']
+      products: [''],
+      contract_type_id: ['', Validators.required]
     });
 
     // get return url from route parameters or default to '/'
@@ -125,13 +146,21 @@ export class ContractCreateComponent implements OnInit {
 
       this.loading = true;
 
-      this.contractService.addContract(this.f.contract_no.value,this.f.title.value, this.f.contract_entity_purchaser_id.value, this.f.contract_entity_supplier_id.value)
+      const contract_data = new Contract();
+      contract_data.contract_no = this.f.contract_no.value;
+      contract_data.title = this.f.title.value;
+      contract_data.contract_entity_purchaser_id = this.f.contract_entity_purchaser_id.value;
+      contract_data.contract_entity_supplier_id = this.f.contract_entity_supplier_id.value;
+      contract_data.contract_type_id = this.f.contract_type_id.value;
+
+      this.contractService.addContract(contract_data)
       .pipe(first())
         .subscribe(
           data => {
             this.router.navigateByUrl('/dashboard');
           },
           error => {
+              console.log('contract create: ' + JSON.stringify(error));
               this.error = error;
               this.loading = false;
           }

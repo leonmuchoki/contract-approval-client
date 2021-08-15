@@ -16,15 +16,19 @@
             <span>{{this.currentUser.user_data.email}} | {{this.currentUser.user_data.role_name}}</span>
             <span class="my-spacer"></span>
             <div style="display: flex; padding: 5px; justify-content: space-between;">
-                <button (click)="goToDashboard()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                <button [routerLink]="['/dashboard']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
                     Dashboard
                 </button>
                 <span style="padding: 25px;"></span>
-                <button (click)="goToTenders()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                <button [routerLink]="['/clauses']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Clauses
+                </button>
+                <span style="padding: 25px;"></span>
+                <button [routerLink]="['/tenders']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
                     Tenders
                 </button>
                 <span style="padding: 25px;"></span>
-                <button (click)="goToEntities()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                <button [routerLink]="['/entity']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
                     Entity
                 </button>
                 <span style="padding: 25px;"></span>

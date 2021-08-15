@@ -30,17 +30,4 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();
     this.router.navigateByUrl('/login');
   }
-
-  goToDashboard(): void {
-    this.router.navigateByUrl('/dashboard');
-  }
-
-  goToTenders(): void {
-    this.router.navigateByUrl('/tenders');
-  }
-
-  goToEntities(): void {
-    this.router.navigateByUrl('/entity');
-  }
-
 }

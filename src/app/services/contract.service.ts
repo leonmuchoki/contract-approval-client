@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Contract } from '../models/contract';
+import { Contract, ContractType } from '../models/contract';
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,22 @@ export class ContractService {
 
   constructor(private http: HttpClient) { }
 
+  getContract(contract_id) {
+    return this.http.get<Contract>(`${this.baseUrl}/contracts/${contract_id}`);
+  }
+
   getAllContracts() {
       return this.http.get<Contract[]>(`${this.baseUrl}/contracts/`);
   }
 
-
-  addContract(contract_no: string, title: string, contract_entity_purchaser_id: number, contract_entity_supplier_id: number) {
-    console.log('posting...' + contract_entity_purchaser_id);
-    return this.http.post<any>(`${this.baseUrl}/contracts/`, { contract_no, title, contract_entity_purchaser_id, contract_entity_supplier_id })
+  addContract(contract_data: Contract) {
+    return this.http.post<any>(`${this.baseUrl}/contracts/`, contract_data)
         .pipe(map(contract => {
             return contract;
         }));
   }
+
+  getContractTypes() {
+    return this.http.get<ContractType[]>(`${this.baseUrl}/contract/types/`);
+  } 
 }

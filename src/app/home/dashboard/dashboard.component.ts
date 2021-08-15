@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
 
       this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {
         this.loading = false;
+        //console.log('contracts::' + JSON.stringify(contracts));
         this.contracts = contracts.map((c) => {
           return {
             id: c?.id,
@@ -66,5 +67,8 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl(`/contract/products/create/${element.id}`);
   }
 
-  redirectToAddContractClauses(): void {}
+  redirectToPreviewContract(element): void {
+    //contract/peview
+    this.router.navigateByUrl(`/contract/preview/${element.id}`);
+  }
 }
