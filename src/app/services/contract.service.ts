@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Contract, ContractType } from '../models/contract';
+import { Contract, ContractClause, ContractType } from '../models/contract';
 import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
@@ -40,5 +40,16 @@ export class ContractService {
   getContractTypes() {
     return this.http.get<ContractType[]>(`${this.baseUrl}/contract/types/`);
   } 
+
+  addContractClauses(contract_clauses_data: ContractClause) {
+    return this.http.post<any>(`${this.baseUrl}/contract/clauses/`, contract_clauses_data)
+        .pipe(map(res => {
+            return res;
+        }));
+  }
+
+  getContractClauses(contract_id) {
+    return this.http.get<Contract>(`${this.baseUrl}/contracts/clauses/${contract_id}`);
+  }
   
 }

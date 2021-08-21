@@ -82,8 +82,8 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl(`/contract/preview/${element.id}`);
   }
 
-  redirectToAddContractClauses(): void {
-    this.router.navigateByUrl('contract/clauses/create');
+  redirectToAddContractClauses(element): void {
+    this.router.navigateByUrl(`contract/clauses/create/${element.id}`, { state: element });
   }
 
   fowardContract(element): void {

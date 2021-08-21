@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,FormControl } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ContractService } from 'src/app/services/contract.service';
+import { ContractClause } from 'src/app/models/contract';
 
 @Component({
   selector: 'app-create-clause',
@@ -10,27 +12,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class CreateContractClauseComponent implements OnInit {
 
-  clause_title: string = '';
-  clause_title_detail: string = '';
+  error: '';
   clauseDetailsInvalid: false;
   clauseDetailsForm: FormGroup;
-  clauseSubDetail: string[] = [];
-  clause: object = {
-    clause_title: '',
-    clause_details: []
-  };
-  clauses = [] as any;
-  clause_detail: {} = {
-    detail: {},
-    has_product: false,
-    sub_details: []
-  };
+  currentContract: any;
+
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private contractService: ContractService
+  ) {
+    this.currentContract = this.router.getCurrentNavigation().extras.state;
+    console.log('currentContract...' + JSON.stringify(this.currentContract));
+  }
 
   ngOnInit(): void {
     this.clauseDetailsForm = this.formBuilder.group({
@@ -41,33 +37,35 @@ export class CreateContractClauseComponent implements OnInit {
     });
   }
 
+  public clauseForm = new FormGroup({
+    clause_title: new FormControl("", Validators.required),
+    clause_body: new FormControl("", Validators.required)
+  });
+
   // convenience getter for easy access to form fields
-  get f() { return this.clauseDetailsForm.controls; }
+  get f() { return this.clauseForm.controls; }
 
-  addTitle(): void {
-    //this.clauseSubDetail.push(this.f.clause_sub_detail.value);
-
-    let c = {
-      clause_title : this.clause_title,
-      clause_details: []
-    }
-    this.clauses.push(c);
-    console.log('addTitle:: ' + JSON.stringify(this.clauses))
-  }
-
-  addDetail(title): void {
-    console.log('addDetail:: ' + JSON.stringify(title));
-    this.clauses.filter(x => x.clause_title == title).map((x) => {
-      let cd = {};
-      return {
-        clause_title: title,
-        clause_details: x.clause_details.push(this.clause_title_detail)
-      }
-    })
-  }
 
   redirectToContractClauseCreate(): void {}
 
-  onSubmit(): void {}
+  createContractClause(): void {
+    let contract_clause_data = new ContractClause();
+    contract_clause_data.contract_id = this.currentContract.id;
+    contract_clause_data.clause_title = this.f.clause_title.value;
+    contract_clause_data.clause_body = this.f.clause_body.value;
+
+    console.log('createContractClause: ' + JSON.stringify(this.f.clause_body.value));
+
+    this.contractService.addContractClauses(contract_clause_data)
+      .pipe(first())
+      .subscribe(
+          res => {
+              console.log('create clause res: ' + JSON.stringify(res));
+              this.router.navigateByUrl('/contracts');
+          },
+          error => {
+              this.error = error;
+          });
+  }
 
 }

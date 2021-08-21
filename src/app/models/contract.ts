@@ -39,3 +39,10 @@ export class Contract {
       id?: number;
       contract_stage?: string;
   }
+
+  export class ContractClause {
+      id?: number;
+      contract_id?: number;
+      clause_title?: string;
+      clause_body?: string;
+  }

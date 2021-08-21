@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'dashboard', component: LandingPageComponent },
   { path: 'contract', component: ContractComponent },
   { path: 'contract/create', component: ContractCreateComponent },
-  { path: 'contract/clauses/create', component: CreateContractClauseComponent },
+  { path: 'contract/clauses/create/:contract_id', component: CreateContractClauseComponent },
   { path: 'tender/create', component: TenderCreateComponent },
   { path: 'tenders', component: TenderComponent },
   { path: 'entity', component: EntityComponent },

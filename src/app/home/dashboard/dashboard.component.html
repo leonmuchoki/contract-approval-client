@@ -49,8 +49,8 @@
         <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Action </th>
             <td mat-cell *matCellDef="let element" class="action-link"> 
-            <span *ngIf="+currentUser.user_data.role_id == roles.procurement"><a mat-button (click)="redirectToAddContractProducts(element)" color="primary">Add Products</a> | </span> 
-            <span *ngIf="+currentUser.user_data.role_id == roles.legal"><a mat-button (click)="redirectToAddContractClauses()" color="primary">Add Clauses</a> | </span>
+            <span *ngIf="+currentUser.user_data.role_id == roles.procurement"><a mat-button (click)="redirectToAddContractProducts(element)" color="primary">Products</a> | </span> 
+            <span *ngIf="+currentUser.user_data.role_id == roles.legal"><a mat-button (click)="redirectToAddContractClauses(element)" color="primary">Clauses</a> | </span>
             <span><a mat-button (click)="redirectToPreviewContract(element)" color="primary">View</a> | </span>  
             <span><a mat-button (click)="fowardContract(element)" color="primary"> Foward</a> | </span> 
             <span *ngIf="+currentUser.user_data.role_id !== roles.procurement"><a mat-button (click)="redirectToPreviewContract(element)" color="primary"> Revert</a></span>  
