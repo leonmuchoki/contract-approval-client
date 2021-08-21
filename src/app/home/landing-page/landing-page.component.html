@@ -1,0 +1,30 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Dashboard</h1>
+  <mat-grid-list cols="3" rowHeight="350px">
+    <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>  
+          <mat-card-title>
+            {{card.title}}
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item [routerLink]="['/contracts']">View</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div style="display: flex; flex-direction: column; justify-content: space-between;">
+            <span class="mat-display-1" style="color: lightseagreen;">{{card.data.text}}</span>
+            <span class="mat-display-3" style="color:lightseagreen">{{card.data.otherText}}</span>
+          </div>
+          
+        </mat-card-content>
+        <mat-card-footer>
+          <button [routerLink]="['/contracts']" mat-button color="primary" style="float: right;">VIEW</button>
+        </mat-card-footer>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

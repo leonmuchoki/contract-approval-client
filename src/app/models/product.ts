@@ -4,5 +4,4 @@ export class Product {
     price?: number;
     quantity?: number;
     created_at?: string;
-    constructor(id: number, name: string) {}
 }

@@ -23,37 +23,51 @@
 
 <!-- <img [src]="previewImgUrl" alt="contract preview"/> -->
 
-<table style="width: 80%; margin-left: 20px; margin-right: 20px;">
+<table style="width: 80%; margin-left: 40px; margin-right: 40px;">
     <tr>
-        <td><h1>CONTRACT NO. KEMSA/RT4/2020-2021 – PROCUREMENT OF CALENDARS AND DIARIES</h1></td>
+        <td><h1>CONTRACT NO. {{contract.contract_no}} – {{contract.title}}</h1></td>
     </tr>
     <tr>
-        <td><p>THIS CONTRACT AGREEMENT is made on the 31ST day of December 2020. </p></td>
+        <td><p>THIS CONTRACT AGREEMENT is made on {{contract.created_at}}. </p></td>
     </tr>
     <tr>
         <td><p>BETWEEN</p></td>
     </tr>
     <tr>
-        <td><p>Kenya Medical Supplies Authority, a state corporation established under an act of parliament and having its principal place of business at Block 13 Commercial Street, Industrial Area of P.O. Box 47715, 00100 Nairobi, Kenya  (hereinafter called “the Purchaser”), </p></td>
+        <td><p>{{contract.contract_entity_purchaser.entity_name}}, {{contract.contract_entity_purchaser.description}}  (hereinafter called “the Purchaser”), </p></td>
     </tr>
     <tr>
         <td><p>AND</p></td>
     </tr>
     <tr>
-        <td><p>Umasa Services and Solutions Ltd, a limited liability company incorporated under the laws of Kenya and having its principal place of business at Biashara street, After fourty building opposite Equity Bank of P.O. Box 105817-00101, Nairobi Kenya (hereinafter called “the Supplier’’).
+        <td><p>{{contract.contract_entity_supplier.entity_name}}, {{contract.contract_entity_supplier.description}} (hereinafter called “the Supplier’’).
         </p></td>
     </tr>
     <tr>
-        <td><h1>I WHEREAS:-</h1></td>
+        <td><h2>I WHEREAS:-</h2></td>
     </tr>
     <tr>
         <td>
             <ol class="d">
-                <li>The Purchaser invited tenders for certain goods, viz procurement of calendars and diaries. (Hereinafter referred to as goods).  </li>
-                <li>The parties have agreed that quantities, unit of measure and unit price together with the total value to be supplied immediately shall be as shown in the table below.22qq
+                <li>The Purchaser invited tenders for certain goods, viz {{contract.title.toLowerCase()}}. (Hereinafter referred to as goods).  </li>
+                <li>The parties have agreed that quantities, unit of measure and unit price together with the total value to be supplied immediately shall be as shown in the table below.
                 </li>
                 <li>
-                    <span>and has accepted a quotation by the supplier for the supply of the aforesaid goods in the sum of Kes. 422,500.00 (Kes. Four hundred and twenty two thousand, five hundred only) (hereinafter called “the Contract Price”) 
+                    <table style="border: 1px solid black; width: 50%">
+                        <thead><th>Item Description</th><th>Qty</th><th>Unit Price (KSH)</th><th>Total Price (KSH)</th></thead>
+                        <tbody>
+                            <tr *ngFor="let p of contract.contract_products;">
+                                <td>{{p.products.name}}</td><td>{{p.product_quantity}}</td><td>{{p.products.price}}</td><td>{{p.product_quantity*p.products.price}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border: 1px solid black;">
+                              <td colspan="3"><strong>Grand total cost VAT inclusive</strong></td>
+                              <td>{{getTotalAmount()}}</td>
+                            </tr>
+                          </tfoot>
+                    </table>
+                    <span>and has accepted a quotation by the supplier for the supply of the aforesaid goods in the sum of Kes. {{getTotalAmount()}} (Kes. {{amountToWords(getTotalAmount())}}) (hereinafter called “the Contract Price”) 
                     </span>
                 </li>
                 <li>Either party can terminate this contract if the other party is in material breach by giving a written notice.
@@ -62,7 +76,7 @@
         </td>
     </tr>
     <tr>
-        <td>II NOW THIS AGREEMENT WITNESSETH AS FOLLOWS:</td>
+        <td><h2>II NOW THIS AGREEMENT WITNESSETH AS FOLLOWS:</h2></td>
     </tr>
     <tr>
         <td>
@@ -93,6 +107,9 @@
                 </li>
             </ol>
             <p>The Supplier further covenants to recall and replace at his own cost, the goods that fail the quality standards of the Purchaser.</p>
+            <p>IN WITNESS whereof, the parties hereto have caused this Agreement to be executed in accordance with their respective laws the day and year first above written.
+            </p>
+            <p>Signed, sealed, delivered by</p>
         </td>
     </tr>
 </table>

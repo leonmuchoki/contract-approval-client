@@ -13,11 +13,15 @@
         </div>
         </mat-toolbar-row>
         <mat-toolbar-row *ngIf="currentUser">
-            <span>{{this.currentUser.user_data.email}} | {{this.currentUser.user_data.role_name}}</span>
+            <span>{{this.currentUser?.user_data.email}} | {{this.currentUser?.user_data.role_name}}</span>
             <span class="my-spacer"></span>
             <div style="display: flex; padding: 5px; justify-content: space-between;">
                 <button [routerLink]="['/dashboard']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
                     Dashboard
+                </button>
+                <span style="padding: 25px;"></span>
+                <button [routerLink]="['/contracts']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Contracts
                 </button>
                 <span style="padding: 25px;"></span>
                 <button [routerLink]="['/clauses']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Contract, ContractType } from '../models/contract';
+import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,15 @@ export class ContractService {
         }));
   }
 
+  updateContract(contract_id, contract_data: Contract) {
+    return this.http.put<any>(`${this.baseUrl}/contracts/${contract_id}`, contract_data)
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
   getContractTypes() {
     return this.http.get<ContractType[]>(`${this.baseUrl}/contract/types/`);
   } 
+  
 }

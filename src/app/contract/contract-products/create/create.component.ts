@@ -27,7 +27,18 @@ export class CreateComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
-    ) { }
+    ) {
+      console.log('create product components: ' + JSON.stringify(this.router.getCurrentNavigation().extras.state));
+      let availableProducts = this.router.getCurrentNavigation().extras.state;
+      availableProducts && availableProducts.map((x) => {
+        let p = new Product();
+        p.id = x?.products.id;
+        p.name = x?.products.name;
+        p.price = x?.products.price;
+        p.quantity = x?.product_quantity;
+        this.clickedRows.add(p);
+      });
+    }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {

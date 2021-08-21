@@ -21,6 +21,7 @@ export class ClauseDetails {
     clause_id?: number;
     clause_part_id?: number;
     clause_detail?: string;
+    has_table?: boolean;
     created_at?: Date;
     created_by?: number;
     clause_sub_details?: ClauseSubDetails;

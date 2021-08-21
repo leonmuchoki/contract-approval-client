@@ -1,1 +1,110 @@
-<p>add clause</p>
+<h1></h1>
+<div style="display:flex; justify-content: space-between; margin: 5px;">
+    <h4 class="card-header">Add Clause Details:</h4>
+    <button mat-raised-button (click)="redirectToContractClauseCreate()" color="accent">Submit Contract Clause</button>
+</div>
+<mat-card>
+    <mat-card-content>
+        <mat-form-field class="example-form-field" appearance="fill">
+            <mat-label>Clause Title</mat-label>
+            <input matInput type="text" [(ngModel)]="clause_title">
+            <button 
+                *ngIf="clause_title" 
+                matSuffix 
+                mat-icon-button 
+                aria-label="Clear" 
+                (click)="addTitle(); clause_title=''"
+                color="accent" >
+              <mat-icon>add</mat-icon>
+            </button>
+        </mat-form-field>
+    <!--     <form [formGroup]="clauseDetailsForm" (ngSubmit)="onSubmit()">
+            <h2>Add Clause Details</h2>
+            <mat-error *ngIf="clauseDetailsInvalid">
+                Issue creating clause detail
+            </mat-error>
+            <mat-form-field class="full-width-input">
+                <input matInput placeholder="clause title" [(ngModel)]="clause_title">
+                <button 
+                    *ngIf="clause_title"
+                    color="basic" 
+                    aria-label="icon button with a plus one icon"
+                    matSuffix 
+                    mat-icon-button 
+                    aria-label="Clear" (click)="clause_title=''"
+                    matTooltip="click to add clause title">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <mat-error>
+                Please provide a valid contract claluse title
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <textarea matInput placeholder="Clause Detail " formControlName="clause_detail" required></textarea>
+                <mat-error>
+                Please provide a valid contract claluse title
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <div style="display: flex;">
+                    <textarea matInput placeholder="Clause Sub Details" formControlName="clause_sub_detail" required></textarea>
+                    <button 
+                        mat-mini-fab 
+                        color="accent" 
+                        aria-label="icon button with a plus one icon"
+                        (click)="addDetail()"
+                        matTooltip="click to add sub detail detail to list below">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <mat-error>
+                    Please provide a valid clause detail
+                </mat-error>
+            </mat-form-field>
+            <p style="text-align: left;"><mat-checkbox formControlName="has_table">Has Product/Services table ?</mat-checkbox></p>
+            <button mat-raised-button color="accent">Create Clause Details</button>
+        </form> -->
+        <!-- <h4>Sub Details:</h4>
+        <ul style="list-style-type: lower-alpha;">
+            <li *ngFor="let clause_detail of clauseSubDetail">
+                {{ clause_detail }}
+            </li>
+        </ul> -->
+    </mat-card-content>
+</mat-card>
+
+<mat-accordion class="example-headers-align" multi *ngFor="let c of clauses">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{c.clause_title}}
+        </mat-panel-title>
+        <mat-panel-description>
+          Add clause title details
+          <mat-icon>edit</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Clause Title Detail</mat-label>
+        <input [(ngModel)]="clause_title_detail" matInput>
+        <button 
+            *ngIf="clause_title_detail" 
+            matSuffix 
+            mat-icon-button 
+            aria-label="Clear" 
+            (click)="addDetail(c.clause_title); clause_title_detail=''"
+            color="accent" >
+            <mat-icon>add</mat-icon>
+        </button>
+      </mat-form-field>
+      <div *ngFor="let cd of clauses">
+        <div *ngIf="cd.clause_title == c.clause_title">
+            <ul *ngFor="let x of cd.clause_details">
+                <li>{{x}}</li>
+            </ul>
+        </div>
+    </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>

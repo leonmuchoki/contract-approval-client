@@ -8,6 +8,8 @@ import { ContractService } from 'src/app/services/contract.service';
 import { User } from 'src/app/models/user';
 import { Router } from '@angular/router';
 import { Contract } from 'src/app/models/contract';
+import { Roles } from 'src/app/_helpers/roles';
+import { Role } from 'src/app/models/role';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,8 +22,9 @@ export class DashboardComponent implements OnInit {
   contracts: Contract[];
   users: User[];
   currentUser: User;
-
-  displayedColumns: string[] = ['contract_no', 'title', 'purchaser', 'supplier','created_at','action'];
+  roles: any;
+  
+  displayedColumns: string[] = ['contract_no', 'title', 'purchaser', 'supplier','created_at','contract_stage','action'];
 
   constructor(
     private userService: UserService, 
@@ -33,6 +36,8 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+      this.roles = {...Roles};
+      
       this.loading = true;
       this.userService.getAll().pipe(first()).subscribe(users => {
           this.loading = false;
@@ -40,21 +45,26 @@ export class DashboardComponent implements OnInit {
           //console.log('users::' + JSON.stringify(users))
       });
       //console.log('Dashboard::currentUser::' + JSON.stringify(this.currentUser));
+      this.getAllContracts();
+  }
 
-      this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {
-        this.loading = false;
-        //console.log('contracts::' + JSON.stringify(contracts));
-        this.contracts = contracts.map((c) => {
-          return {
-            id: c?.id,
-            contract_no: c?.contract_no,
-            title: c?.title,
-            purchaser: c?.contract_entity_purchaser?.entity_name,
-            supplier: c?.contract_entity_supplier?.entity_name,
-            created_at: c?.created_at//.toLocaleString(DateTime.DATE_MED)
-          }
-        });
-        //console.log('contracts::' + JSON.stringify(this.contracts));
+  getAllContracts(): void {
+    this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {
+      this.loading = false;
+      //console.log('contracts::' + JSON.stringify(contracts));
+      this.contracts = contracts.map((c) => {
+        return {
+          id: c?.id,
+          contract_no: c?.contract_no,
+          title: c?.title,
+          purchaser: c?.contract_entity_purchaser?.entity_name,
+          supplier: c?.contract_entity_supplier?.entity_name,
+          created_at: new Date(c?.created_at).toLocaleDateString(),
+          contract_stage: c?.contract_stage,
+          contract_products: c?.contract_products
+        }
+      });
+      //console.log('contracts::' + JSON.stringify(this.contracts));
     });
   }
 
@@ -64,11 +74,46 @@ export class DashboardComponent implements OnInit {
 
   redirectToAddContractProducts(element): void {
     console.log('clickedRow::' + JSON.stringify(element));
-    this.router.navigateByUrl(`/contract/products/create/${element.id}`);
+    this.router.navigateByUrl(`/contract/products/create/${element.id}`,{ state: element.contract_products });
   }
 
   redirectToPreviewContract(element): void {
     //contract/peview
     this.router.navigateByUrl(`/contract/preview/${element.id}`);
+  }
+
+  redirectToAddContractClauses(): void {
+    this.router.navigateByUrl('contract/clauses/create');
+  }
+
+  fowardContract(element): void {
+    //console.log('fowardContract::current user: ' + JSON.stringify(this.currentUser));
+    //console.log('fowardContract::current user: ' + JSON.stringify(element));
+    let contract_id = element?.id;
+    let contract_data = new Contract();
+    contract_data.id = contract_id;
+    let currentRole = +this.currentUser.user_data.role_id;
+    switch(currentRole) {
+      case Roles.procurement:
+        contract_data.contract_stage_id = Roles.legal;
+        break;
+      case Roles.legal:
+        contract_data.contract_stage_id = Roles.ceo;
+        break;
+      case Roles.finance:
+        contract_data.contract_stage_id = Roles.ceo;
+        break;
+      case Roles.ceo:
+        contract_data.contract_stage_id = Roles.supplier;
+        break;
+      default:
+        contract_data.contract_stage_id = Roles.procurement;
+        break;
+    }
+
+    this.contractService.updateContract(contract_id, contract_data).pipe(first()).subscribe((res) => {
+      console.log('fowardContract::current user: ' + JSON.stringify(res));
+      this.getAllContracts();
+    });
   }
 }
