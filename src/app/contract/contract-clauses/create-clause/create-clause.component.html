@@ -5,20 +5,31 @@
 </div>
 <mat-card>
     <mat-card-content>
+        <mat-form-field >
+            <mat-label>Re-Use Contract Clause:</mat-label>
+            <mat-select [(ngModel)]="selectedClauseTitle" (selectionChange)="fetchContractClause($event)" name="clause_title">
+            <mat-option *ngFor="let clause of contract_clause_titles" [value]="clause.contract_id">
+                {{clause.clause_title}}
+            </mat-option>
+            </mat-select>
+        </mat-form-field>
         <form [formGroup]="clauseForm">
+            
             <mat-form-field class="example-form-field" appearance="fill">
                 <mat-label>Clause Title / Tag</mat-label>
                 <input matInput type="text" [formControl]="clauseForm.controls.clause_title">
             </mat-form-field>
             <editor
                 [formControl]="clauseForm.controls.clause_body"
+                class="mat-elevation-z1"
                 apiKey="32xabijzbj4lhs5sq01j15qq6m6ujr9q0rl49348srub5gd4"
+                (onInit)="handleEditorInit($event)"
                 [init]="{
                     icons: 'material',
                     skin: 'borderless',
                     plugins: 'advlist lists table',
                     menubar: false,
-                    min_height: 150,
+                    min_height: 450,
                     toolbar:
                             'undo redo | formatselect | bold italic | \
                             alignleft aligncenter alignright alignjustify | \

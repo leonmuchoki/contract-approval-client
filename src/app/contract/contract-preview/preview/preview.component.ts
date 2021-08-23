@@ -3,9 +3,9 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 import { first } from 'rxjs/operators';
 import { Packer } from "docx";
 import { saveAs } from "file-saver";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Contract } from 'src/app/models/contract';
+import { Contract, ContractClause } from 'src/app/models/contract';
 import { ContractService } from 'src/app/services/contract.service';
 
 import { DocumentCreator } from './doc-generator';
@@ -21,12 +21,18 @@ export class PreviewComponent implements OnInit {
   contract: Contract;
   loading: Boolean = false;
   previewImgUrl: any;
+  currentContract: any;
+  contract_clauses: ContractClause;
   
   constructor(
     private contractService: ContractService,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
-    ) { }
+    private sanitizer: DomSanitizer,
+    private router: Router
+    ) {
+      this.currentContract = this.router.getCurrentNavigation().extras.state;
+      console.log('currentContract...' + JSON.stringify(this.currentContract));
+    }
 
   ngOnInit(): void {
     this.loading = true;
@@ -37,10 +43,12 @@ export class PreviewComponent implements OnInit {
 
     this.contractService.getContract(this.contract_id).pipe(first()).subscribe(contract => {
       this.loading = false;
-      console.log('contracts::' + JSON.stringify(contract));
+      //console.log('contracts::' + JSON.stringify(contract));
       this.contract = contract;
       this.contract.created_at = new Date(contract.created_at).toDateString();
     });
+
+    this.getCurrentContractClauses(this.currentContract.id);
   }
 
   getTotalAmount() : number {
@@ -66,6 +74,21 @@ export class PreviewComponent implements OnInit {
       
       console.log("Document created successfully");
     });
+  }
+
+  getCurrentContractClauses(contract_id): void {
+    contract_id && this.contractService.getContractClauses(contract_id)
+    .pipe(first())
+    .subscribe(
+      (res) => {
+        //console.log('res...any available contracts: ' + JSON.stringify(res));
+        this.contract_clauses = res;
+      },
+      (err) => {
+        //console.log('err...' + err.status + " " + err.statusText);
+        console.error(err);
+      }
+    );
   }
 
   public getSantizeUrl(url : string) {

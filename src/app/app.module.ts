@@ -36,6 +36,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { NgxChartsModule }from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatIconModule,
     MatButtonModule,
     LayoutModule,
-    EditorModule
+    EditorModule,
+    NgxChartsModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
   bootstrap: [AppComponent]

@@ -1,11 +1,11 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="3" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
+  <mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile>
       <mat-card class="dashboard-card">
         <mat-card-header>  
           <mat-card-title>
-            {{card.title}}
+            Current Contracts
             <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -14,17 +14,92 @@
             </mat-menu>
           </mat-card-title>
         </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div style="display: flex; flex-direction: column; justify-content: space-between;">
-            <span class="mat-display-1" style="color: lightseagreen;">{{card.data.text}}</span>
-            <span class="mat-display-3" style="color:lightseagreen">{{card.data.otherText}}</span>
+        <mat-card-content class="dashboard-card-content" style="padding: 15px;">
+          <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: 700;text-align: center; color: darkgrey;height: 2.5rem;">
+            <div style="display: flex; flex-direction: column;">
+              <span style="margin-bottom: 30px;">Contracts</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">{{allContracts}}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; justify-content: space-between;">
+              <span style="margin-bottom: 30px;">In Procurment</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">{{procurementContracts}}</span>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <span style="margin-bottom: 30px;">Awaiting Legal</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">{{legalContracts}}</span>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <span style="margin-bottom: 30px;">Awaiting CEO</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">{{ceoContracts}}</span>
+            </div>
           </div>
-          
         </mat-card-content>
         <mat-card-footer>
-          <button [routerLink]="['/contracts']" mat-button color="primary" style="float: right;">VIEW</button>
+          <button [routerLink]="['/contracts']" mat-button color="primary" style="float: right; display: none;" >VIEW</button>
         </mat-card-footer>
       </mat-card>
     </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-header>  
+          <mat-card-title>
+            Past Contracts
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item [routerLink]="['/contracts']">View</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content" style="padding: 15px;">
+          <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: 700;text-align: center; color: darkgrey;height: 2.5rem;">
+            <div style="display: flex; flex-direction: column;">
+              <span style="margin-bottom: 30px;">Approved</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">5</span>
+            </div>
+            <div style="display: flex; flex-direction: column; justify-content: space-between;">
+              <span style="margin-bottom: 30px;">Rejected</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">2</span>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <span style="margin-bottom: 30px;">Average Process Time</span>
+              <span style="margin-bottom: 30px; color: dodgerblue; font-size: 40px;">2 days</span>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-footer>
+          <button [routerLink]="['/contracts']" mat-button color="primary" style="float: right; display: none;" >VIEW</button>
+        </mat-card-footer>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <div *ngIf="contractData.length > 0">
+        <ngx-charts-pie-grid 
+        [results]="contractData" 
+        [view]="view"
+        [scheme]="colorScheme">
+        </ngx-charts-pie-grid>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2"  [rowspan]="2">
+      <div *ngIf="contractStatus.length > 0" style="margin-top: 60px; margin-bottom: 70px;">
+        <ngx-charts-bar-vertical
+          [view]="viewBarChart"
+          [scheme]="colorSchemeBarChart"
+          [results]="contractStatus"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegendBarchart"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+      </div>
+    </mat-grid-tile>
   </mat-grid-list>
 </div>
+

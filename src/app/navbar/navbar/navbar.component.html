@@ -2,7 +2,7 @@
     <mat-toolbar color="primary">
       <mat-toolbar-row>
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-            <mat-icon>menu</mat-icon>
+            <mat-icon>fact_check</mat-icon>
         </button>
         <span>Contract Approval</span>
         <span class="my-spacer"></span>
@@ -13,7 +13,7 @@
         </div>
         </mat-toolbar-row>
         <mat-toolbar-row *ngIf="currentUser">
-            <span>{{this.currentUser?.user_data.email}} | {{this.currentUser?.user_data.role_name}}</span>
+            <span>{{this.currentUser?.user_data.email}} | {{this.currentUser?.user_data.role_name | uppercase}}</span>
             <span class="my-spacer"></span>
             <div style="display: flex; padding: 5px; justify-content: space-between;">
                 <button [routerLink]="['/dashboard']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">

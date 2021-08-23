@@ -1,7 +1,6 @@
-<h1>Contracts</h1>
 <div class="card mt-4">
     <div style="display:flex; justify-content: space-between; margin: 5px;">
-        <h4 class="card-header">Available Contracts:</h4>
+      <h1 class="mat-title"><span matBadge={{contracts.length}} matBadgeOverlap="false">Contracts</span></h1>
         <button mat-raised-button (click)="redirectToContractCreate()" color="accent" *ngIf="+currentUser.user_data.role_id == roles.procurement">Create Contract</button>
     </div>
     <table mat-table [dataSource]="contracts" class="mat-elevation-z8" color="basic">
@@ -53,7 +52,7 @@
             <span *ngIf="+currentUser.user_data.role_id == roles.legal"><a mat-button (click)="redirectToAddContractClauses(element)" color="primary">Clauses</a> | </span>
             <span><a mat-button (click)="redirectToPreviewContract(element)" color="primary">View</a> | </span>  
             <span><a mat-button (click)="fowardContract(element)" color="primary"> Foward</a> | </span> 
-            <span *ngIf="+currentUser.user_data.role_id !== roles.procurement"><a mat-button (click)="redirectToPreviewContract(element)" color="primary"> Revert</a></span>  
+            <span *ngIf="+currentUser.user_data.role_id !== roles.procurement"><a mat-button (click)="revertContract(element)" color="primary"> Revert</a></span>  
             </td>
       </ng-container>
       

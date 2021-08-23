@@ -44,72 +44,8 @@
         </p></td>
     </tr>
     <tr>
-        <td><h2>I WHEREAS:-</h2></td>
-    </tr>
-    <tr>
         <td>
-            <ol class="d">
-                <li>The Purchaser invited tenders for certain goods, viz {{contract.title.toLowerCase()}}. (Hereinafter referred to as goods).  </li>
-                <li>The parties have agreed that quantities, unit of measure and unit price together with the total value to be supplied immediately shall be as shown in the table below.
-                </li>
-                <li>
-                    <table style="border: 1px solid black; width: 50%">
-                        <thead><th>Item Description</th><th>Qty</th><th>Unit Price (KSH)</th><th>Total Price (KSH)</th></thead>
-                        <tbody>
-                            <tr *ngFor="let p of contract.contract_products;">
-                                <td>{{p.products.name}}</td><td>{{p.product_quantity}}</td><td>{{p.products.price}}</td><td>{{p.product_quantity*p.products.price}}</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr style="border: 1px solid black;">
-                              <td colspan="3"><strong>Grand total cost VAT inclusive</strong></td>
-                              <td>{{getTotalAmount()}}</td>
-                            </tr>
-                          </tfoot>
-                    </table>
-                    <span>and has accepted a quotation by the supplier for the supply of the aforesaid goods in the sum of Kes. {{getTotalAmount()}} (Kes. {{amountToWords(getTotalAmount())}}) (hereinafter called “the Contract Price”) 
-                    </span>
-                </li>
-                <li>Either party can terminate this contract if the other party is in material breach by giving a written notice.
-                </li>
-              </ol>              
-        </td>
-    </tr>
-    <tr>
-        <td><h2>II NOW THIS AGREEMENT WITNESSETH AS FOLLOWS:</h2></td>
-    </tr>
-    <tr>
-        <td>
-            <ol>
-                <li>In this Agreement words and expressions shall have the same meanings as are respectively assigned to them in the general Conditions of Contract referred to herein below.
-                </li>
-                <li>The following documents shall be deemed to form and be read and construed as part of this Agreement, viz:
-                </li>
-                <li>
-                    <ol class="d">
-                        <li>This Contract Form;</li>
-                        <li>General Conditions of contract;</li>
-                        <li>Specific Conditions of contract;</li>
-                        <li>Technical Requirements;</li>
-                        <li>The Price  Schedule and tender form submitted by the Supplier;
-                        </li>
-                        <li>Technical Requirements;</li>
-                        <li>The Price  Schedule and tender form submitted by the Supplier;
-                        </li>
-                        <li>The Purchaser’s Notification of Award; and</li>
-                        <li>Letter of acceptance by the Supplier.</li>
-                    </ol>
-                </li>
-                <li>In consideration of the payments to be made by the purchaser to the supplier as hereinafter mentioned, the supplier hereby covenants with the purchaser to provide the goods as per the tender sample and to remedy defects therein in conformity in all respects with the provisions of the Contract.
-                </li>
-                <li>The Purchaser hereby covenants to pay the Supplier in consideration of the provision of the goods  and the remedying of defects therein, the Contract Price or such other sum as may become payable within a period of ninety days.</li>
-                <li>The Supplier covenants to adhere to the delivery schedules attached and agreed upon between the Supplier and the Purchaser.
-                </li>
-            </ol>
-            <p>The Supplier further covenants to recall and replace at his own cost, the goods that fail the quality standards of the Purchaser.</p>
-            <p>IN WITNESS whereof, the parties hereto have caused this Agreement to be executed in accordance with their respective laws the day and year first above written.
-            </p>
-            <p>Signed, sealed, delivered by</p>
+            <div [innerHTML]="contract_clauses?.clause_body"></div>
         </td>
     </tr>
 </table>

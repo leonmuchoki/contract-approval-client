@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Contract } from 'src/app/models/contract';
 import { Roles } from 'src/app/_helpers/roles';
 import { Role } from 'src/app/models/role';
+import { ContractStages } from 'src/app/_helpers/contract_stages';
 
 @Component({
   selector: 'app-dashboard',
@@ -63,6 +64,18 @@ export class DashboardComponent implements OnInit {
           contract_stage: c?.contract_stage,
           contract_products: c?.contract_products
         }
+      })
+      .filter((x) => {
+        switch(+this.currentUser.user_data.role_id) {
+          case Roles.legal:
+            return x.contract_stage.id == ContractStages.legal;
+            break;
+          case Roles.ceo:
+            return x.contract_stage.id == ContractStages.ceo;
+            break;
+          case Roles.procurement:
+            return x;
+        }
       });
       //console.log('contracts::' + JSON.stringify(this.contracts));
     });
@@ -79,7 +92,7 @@ export class DashboardComponent implements OnInit {
 
   redirectToPreviewContract(element): void {
     //contract/peview
-    this.router.navigateByUrl(`/contract/preview/${element.id}`);
+    this.router.navigateByUrl(`/contract/preview/${element.id}`,{ state: element });
   }
 
   redirectToAddContractClauses(element): void {
@@ -95,19 +108,47 @@ export class DashboardComponent implements OnInit {
     let currentRole = +this.currentUser.user_data.role_id;
     switch(currentRole) {
       case Roles.procurement:
-        contract_data.contract_stage_id = Roles.legal;
+        contract_data.contract_stage_id = ContractStages.legal;
         break;
       case Roles.legal:
-        contract_data.contract_stage_id = Roles.ceo;
+        contract_data.contract_stage_id = ContractStages.ceo;
         break;
       case Roles.finance:
-        contract_data.contract_stage_id = Roles.ceo;
+        contract_data.contract_stage_id = ContractStages.ceo;
         break;
       case Roles.ceo:
-        contract_data.contract_stage_id = Roles.supplier;
+        contract_data.contract_stage_id = ContractStages.supplier;
         break;
       default:
-        contract_data.contract_stage_id = Roles.procurement;
+        contract_data.contract_stage_id = ContractStages.procurement;
+        break;
+    }
+
+    this.contractService.updateContract(contract_id, contract_data).pipe(first()).subscribe((res) => {
+      console.log('fowardContract::current user: ' + JSON.stringify(res));
+      this.getAllContracts();
+    });
+  }
+
+  revertContract(element): void {
+    //console.log('fowardContract::current user: ' + JSON.stringify(this.currentUser));
+    //console.log('fowardContract::current user: ' + JSON.stringify(element));
+    let contract_id = element?.id;
+    let contract_data = new Contract();
+    contract_data.id = contract_id;
+    let currentRole = +this.currentUser.user_data.role_id;
+    switch(currentRole) {
+      case Roles.legal:
+        contract_data.contract_stage_id = ContractStages.procurement;
+        break;
+      case Roles.finance:
+        contract_data.contract_stage_id = ContractStages.legal;
+        break;
+      case Roles.ceo:
+        contract_data.contract_stage_id = ContractStages.legal;
+        break;
+      default:
+        contract_data.contract_stage_id = ContractStages.procurement;
         break;
     }
 

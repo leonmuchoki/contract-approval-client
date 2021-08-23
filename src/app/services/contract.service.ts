@@ -42,14 +42,18 @@ export class ContractService {
   } 
 
   addContractClauses(contract_clauses_data: ContractClause) {
-    return this.http.post<any>(`${this.baseUrl}/contract/clauses/`, contract_clauses_data)
+    return this.http.post<ContractClause>(`${this.baseUrl}/contract/clauses/`, contract_clauses_data)
         .pipe(map(res => {
             return res;
         }));
   }
 
   getContractClauses(contract_id) {
-    return this.http.get<Contract>(`${this.baseUrl}/contracts/clauses/${contract_id}`);
+    return this.http.get<ContractClause>(`${this.baseUrl}/contract/clauses/${contract_id}`);
+  }
+
+  getContractClauseTitles() {
+    return this.http.get<ContractClause[]>(`${this.baseUrl}/contract/clauses/clause_titles`);
   }
   
 }
