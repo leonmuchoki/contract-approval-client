@@ -1,21 +1,39 @@
 <div style="display:flex; justify-content: space-between; margin: 5px;">
     <h4 class="card-header">Contract Preview</h4>
-    <div>
-        <button 
-            mat-raised-button 
-            (click)="generatePreviewDoc()" 
-            color="accent" 
-            style="margin-right: 10px;">
-            DELETE CONTRACT
-        </button>
-        <button 
-            mat-raised-button 
-            (click)="generatePreviewDoc()" 
-            color="accent" 
-            style="margin-right: 10px;">
-            FOWARD CONTRACT
-        </button>
-        <button mat-raised-button (click)="generatePreviewDoc()" color="accent">
+    <div style="display: flex;">
+        <div *ngIf="currentUser.user_data.role_id !== roles.ceo">
+            <button 
+                mat-raised-button 
+                (click)="revertContract()" 
+                color="accent" 
+                style="margin-right: 10px;">
+                REVERT CONTRACT
+            </button>
+            <button 
+                mat-raised-button 
+                (click)="fowardContract()" 
+                color="accent" 
+                style="margin-right: 10px;">
+                FOWARD CONTRACT
+            </button>
+        </div>
+        <div *ngIf="currentUser.user_data.role_id === roles.ceo">
+            <button 
+                mat-raised-button 
+                (click)="rejectContract()" 
+                color="warn" 
+                style="margin-right: 10px;">
+                REJECT CONTRACT
+            </button>
+            <button 
+                mat-raised-button 
+                (click)="approveContract()" 
+                color="primary" 
+                style="margin-right: 10px;">
+                APPROVE CONTRACT
+            </button>
+        </div>
+        <button mat-raised-button (click)="generatePreviewDoc()" color="basic">
             Download Preview
         </button>
     </div>
@@ -45,7 +63,7 @@
     </tr>
     <tr>
         <td>
-            <div [innerHTML]="contract_clauses?.clause_body"></div>
+            <div  [innerHTML]="contract_clauses?.clause_body"></div>
         </td>
     </tr>
 </table>

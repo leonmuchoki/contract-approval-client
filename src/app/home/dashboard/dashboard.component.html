@@ -1,6 +1,6 @@
 <div class="card mt-4">
     <div style="display:flex; justify-content: space-between; margin: 5px;">
-      <h1 class="mat-title"><span matBadge={{contracts.length}} matBadgeOverlap="false">Contracts</span></h1>
+      <h1 class="mat-title"><span matBadge={{contracts?.length}} matBadgeOverlap="false">Contracts</span></h1>
         <button mat-raised-button (click)="redirectToContractCreate()" color="accent" *ngIf="+currentUser.user_data.role_id == roles.procurement">Create Contract</button>
     </div>
     <table mat-table [dataSource]="contracts" class="mat-elevation-z8" color="basic">
@@ -44,6 +44,12 @@
           <td mat-cell *matCellDef="let element"> {{element?.contract_stage?.contract_stage}} </td>
         </ng-container>
 
+        <!-- contract status Column -->
+        <ng-container matColumnDef="contract_status">
+          <th mat-header-cell *matHeaderCellDef color="primary"> Contract Status</th>
+          <td mat-cell *matCellDef="let element"> {{element?.contract_status?.status}} </td>
+        </ng-container>
+
         <!-- Action Column -->
         <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Action </th>
@@ -51,8 +57,8 @@
             <span *ngIf="+currentUser.user_data.role_id == roles.procurement"><a mat-button (click)="redirectToAddContractProducts(element)" color="primary">Products</a> | </span> 
             <span *ngIf="+currentUser.user_data.role_id == roles.legal"><a mat-button (click)="redirectToAddContractClauses(element)" color="primary">Clauses</a> | </span>
             <span><a mat-button (click)="redirectToPreviewContract(element)" color="primary">View</a> | </span>  
-            <span><a mat-button (click)="fowardContract(element)" color="primary"> Foward</a> | </span> 
-            <span *ngIf="+currentUser.user_data.role_id !== roles.procurement"><a mat-button (click)="revertContract(element)" color="primary"> Revert</a></span>  
+            <span *ngIf="+currentUser.user_data.role_id !== roles.ceo"><a mat-button (click)="fowardContract(element)" color="primary"> Foward</a> | </span> 
+            <span *ngIf="+currentUser.user_data.role_id !== roles.procurement && +currentUser.user_data.role_id !== roles.ceo"><a mat-button (click)="revertContract(element)" color="primary"> Revert</a></span>  
             </td>
       </ng-container>
       

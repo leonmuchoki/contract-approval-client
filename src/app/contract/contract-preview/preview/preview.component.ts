@@ -9,6 +9,12 @@ import { Contract, ContractClause } from 'src/app/models/contract';
 import { ContractService } from 'src/app/services/contract.service';
 
 import { DocumentCreator } from './doc-generator';
+import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
+import { ContractStages } from 'src/app/_helpers/contract_stages';
+import { Roles } from 'src/app/_helpers/roles';
+import { Role } from 'src/app/models/role';
+import { ContractStatus } from 'src/app/_helpers/contract_status';
 
 @Component({
   selector: 'app-preview',
@@ -23,22 +29,28 @@ export class PreviewComponent implements OnInit {
   previewImgUrl: any;
   currentContract: any;
   contract_clauses: ContractClause;
+  currentUser: User;
+  roles: any;
   
   constructor(
     private contractService: ContractService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private router: Router
     ) {
       this.currentContract = this.router.getCurrentNavigation().extras.state;
       console.log('currentContract...' + JSON.stringify(this.currentContract));
+      this.authService.currentUser.subscribe(x => this.currentUser = x);
     }
 
   ngOnInit(): void {
+    this.roles = {...Roles};
+
     this.loading = true;
     this.route.params.subscribe((params) => {
       console.log(params['contract_id']);
-      this.contract_id = params['contract_id'];
+      this.contract_id = params['contract_id']; 
     });
 
     this.contractService.getContract(this.contract_id).pipe(first()).subscribe(contract => {
@@ -89,6 +101,78 @@ export class PreviewComponent implements OnInit {
         console.error(err);
       }
     );
+  }
+
+  fowardContract(): void {
+    let contract_data = new Contract();
+    contract_data.id = this.currentContract.id;
+    let currentRole = +this.currentUser.user_data.role_id;
+    switch(currentRole) {
+      case Roles.procurement:
+        contract_data.contract_stage_id = ContractStages.legal;
+        break;
+      case Roles.legal:
+        contract_data.contract_stage_id = ContractStages.ceo;
+        break;
+      case Roles.finance:
+        contract_data.contract_stage_id = ContractStages.ceo;
+        break;
+      case Roles.ceo:
+        contract_data.contract_stage_id = ContractStages.supplier;
+        break;
+      default:
+        contract_data.contract_stage_id = ContractStages.procurement;
+        break;
+  }
+  this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
+    console.log('fowardContract::current user: ' + JSON.stringify(res));
+    this.router.navigateByUrl('/contracts');
+  });
+}
+
+  revertContract(): void {
+    let contract_data = new Contract();
+    contract_data.id = this.currentContract.id;;
+    let currentRole = +this.currentUser.user_data.role_id;
+    switch(currentRole) {
+      case Roles.legal:
+        contract_data.contract_stage_id = ContractStages.procurement;
+        break;
+      case Roles.finance:
+        contract_data.contract_stage_id = ContractStages.legal;
+        break;
+      case Roles.ceo:
+        contract_data.contract_stage_id = ContractStages.legal;
+        break;
+      default:
+        contract_data.contract_stage_id = ContractStages.procurement;
+        break;
+    }
+
+    this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
+      console.log('rejectContract::current user: ' + JSON.stringify(res));
+      this.router.navigateByUrl('/contracts');
+    });
+  }
+
+  approveContract(): void {
+    let contract_data = new Contract();
+    contract_data.id = this.currentContract.id;
+    contract_data.contract_status_id = ContractStatus.approved;
+    this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
+      console.log('approveContract::current user: ' + JSON.stringify(res));
+      this.router.navigateByUrl('/contracts');
+    });
+  }
+
+  rejectContract(): void {
+    let contract_data = new Contract();
+    contract_data.id = this.currentContract.id;
+    contract_data.contract_status_id = ContractStatus.rejected;
+    this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
+      console.log('rejectContract::current user: ' + JSON.stringify(res));
+      this.router.navigateByUrl('/contracts');
+    });
   }
 
   public getSantizeUrl(url : string) {

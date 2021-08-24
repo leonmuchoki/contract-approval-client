@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   currentUser: User;
   roles: any;
   
-  displayedColumns: string[] = ['contract_no', 'title', 'purchaser', 'supplier','created_at','contract_stage','action'];
+  displayedColumns: string[] = ['contract_no', 'title', 'purchaser', 'supplier','created_at','contract_stage', 'contract_status','action'];
 
   constructor(
     private userService: UserService, 
@@ -62,7 +62,8 @@ export class DashboardComponent implements OnInit {
           supplier: c?.contract_entity_supplier?.entity_name,
           created_at: new Date(c?.created_at).toLocaleDateString(),
           contract_stage: c?.contract_stage,
-          contract_products: c?.contract_products
+          contract_products: c?.contract_products,
+          contract_status: c?.contract_status
         }
       })
       .filter((x) => {

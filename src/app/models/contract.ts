@@ -13,6 +13,8 @@ export class Contract {
     contract_type?: ContractType;
     contract_stage_id?: number;
     contract_stage?: ContractStage;
+    contract_status_id?: number;
+    contract_status?: ContractStatus
     contract_products?: ContractProduct[];
   }
 
@@ -39,6 +41,11 @@ export class Contract {
       id?: number;
       contract_stage?: string;
   }
+
+  export class ContractStatus {
+    id?: number;
+    status?: string;
+}
 
   export class ContractClause {
       id?: number;

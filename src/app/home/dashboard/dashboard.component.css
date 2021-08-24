@@ -1,4 +1,16 @@
 table {
-  width: 98%;
+  width: 99%;
   margin: 20px;
+}
+
+.mat-column-contract_status {
+  width: 32px;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.mat-column-action {
+  text-align: center;
+  padding: 10px;
 }

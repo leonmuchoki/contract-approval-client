@@ -4,6 +4,7 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Contract } from 'src/app/models/contract';
 import { ContractService } from 'src/app/services/contract.service';
 import { ContractStages } from 'src/app/_helpers/contract_stages';
+import { ContractStatus } from 'src/app/_helpers/contract_status';
 
 @Component({
   selector: 'app-landing-page',
@@ -17,9 +18,13 @@ export class LandingPageComponent implements OnInit{
   legalContracts: number = 0;
   ceoContracts: number = 0;
   supplierContracts: number = 0;
+  initiatedContracts: number = 0;
+  approvedContracts: number = 0;
+  rejectedContracts: number = 0;
 
   cards: any;
   contractData = [];
+  contractStatus = [];
 
   view: any[] = [1200, 400];
   // options
@@ -28,17 +33,6 @@ export class LandingPageComponent implements OnInit{
   colorScheme = {
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
   };
-
-  contractStatus = [
-    {
-      name: 'Approved',
-      value: 4
-    },
-    {
-      name: 'Rejected',
-      value: 2
-    }
-  ];
 
   /*BAR CHART*/
   viewBarChart: any[] = [700, 400];
@@ -91,15 +85,23 @@ export class LandingPageComponent implements OnInit{
     this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {
       //console.log('landing-page::contracts::' + contracts.length);
       this.allContracts = contracts.length;
-      this.procurementContracts = contracts.filter(x => x.contract_stage.id == ContractStages.procurement).length || 0;
-      this.legalContracts = contracts.filter(x => x.contract_stage.id == ContractStages.legal).length || 0;
-      this.ceoContracts = contracts.filter(x => x.contract_stage.id == ContractStages.ceo).length;
-      this.supplierContracts = contracts.filter(x => x.contract_stage.id == ContractStages.supplier).length;
+      this.procurementContracts = contracts.filter(x => x?.contract_stage?.id == ContractStages.procurement).length || 0;
+      this.legalContracts = contracts.filter(x => x?.contract_stage?.id == ContractStages.legal).length || 0;
+      this.ceoContracts = contracts.filter(x => x?.contract_stage?.id == ContractStages.ceo).length;
+      this.supplierContracts = contracts.filter(x => x?.contract_stage?.id == ContractStages.supplier).length;
       //this.contractData.push({name:'contracts', value: this.allContracts});
       this.contractData.push({name: 'procurement stage', value: this.procurementContracts});
       this.contractData.push({name: 'legal stage', value: this.legalContracts});
       this.contractData.push({name: 'ceo stage', value: this.ceoContracts});
       this.contractData.push({name: 'supplier stage', value: this.supplierContracts});
+
+      this.initiatedContracts = contracts.filter(x => x?.contract_status?.id == ContractStatus.initiated).length;
+      this.approvedContracts = contracts.filter(x => x?.contract_status?.id == ContractStatus.approved).length;
+      this.rejectedContracts = contracts.filter(x => x?.contract_status?.id == ContractStatus.rejected).length;
+      this.contractStatus.push({name: 'Approved ', value: this.approvedContracts});
+      this.contractStatus.push({name: 'Rejected ', value: this.rejectedContracts});
+      this.contractStatus.push({name: 'Initiated ', value: this.initiatedContracts});
+
       console.log('landing-page::contracts 2::' + this.contractData);
       this.populateCards(contracts);
       this.contracts = contracts.map((c) => {

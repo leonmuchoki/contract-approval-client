@@ -15,6 +15,8 @@ import { TenderService } from 'src/app/services/tender.service';
 import { Contract, ContractEntity, ContractType } from 'src/app/models/contract';
 import { Product } from 'src/app/models/product';
 import { Tender } from 'src/app/models/tender';
+import { ContractStatus } from 'src/app/_helpers/contract_status';
+import { ContractStages } from 'src/app/_helpers/contract_stages';
 
 @Component({
   selector: 'app-contract-create',
@@ -152,6 +154,8 @@ export class ContractCreateComponent implements OnInit {
       contract_data.contract_entity_purchaser_id = this.f.contract_entity_purchaser_id.value;
       contract_data.contract_entity_supplier_id = this.f.contract_entity_supplier_id.value;
       contract_data.contract_type_id = this.f.contract_type_id.value;
+      contract_data.contract_status_id = ContractStatus.initiated;
+      contract_data.contract_stage_id = ContractStages.procurement;
 
       this.contractService.addContract(contract_data)
       .pipe(first())
