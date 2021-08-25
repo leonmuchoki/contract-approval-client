@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { DateTime } from 'luxon';
+import { ToastrService } from 'ngx-toastr';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -31,7 +32,8 @@ export class DashboardComponent implements OnInit {
     private userService: UserService, 
     private auth: AuthService,
     private contractService: ContractService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
     ) {
     this.auth.currentUser.subscribe(x => this.currentUser = x);
   }
@@ -53,7 +55,7 @@ export class DashboardComponent implements OnInit {
     this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {
       this.loading = false;
       //console.log('contracts::' + JSON.stringify(contracts));
-      this.contracts = contracts.map((c) => {
+      this.contracts = Array.isArray(contracts) && contracts.length > 0 && contracts.map((c) => {
         return {
           id: c?.id,
           contract_no: c?.contract_no,
@@ -67,14 +69,15 @@ export class DashboardComponent implements OnInit {
         }
       })
       .filter((x) => {
+        if(x.contract_stage == undefined || x.contract_stage == null) return x;
         switch(+this.currentUser.user_data.role_id) {
           case Roles.legal:
-            return x.contract_stage.id == ContractStages.legal;
+            return x?.contract_stage.id == ContractStages.legal;
             break;
           case Roles.ceo:
-            return x.contract_stage.id == ContractStages.ceo;
+            return x?.contract_stage.id == ContractStages.ceo;
             break;
-          case Roles.procurement:
+          case Roles?.procurement:
             return x;
         }
       });
@@ -127,6 +130,7 @@ export class DashboardComponent implements OnInit {
 
     this.contractService.updateContract(contract_id, contract_data).pipe(first()).subscribe((res) => {
       console.log('fowardContract::current user: ' + JSON.stringify(res));
+      this.toastr.success('Successfully fowarded Contract!', 'Status');
       this.getAllContracts();
     });
   }
@@ -155,6 +159,7 @@ export class DashboardComponent implements OnInit {
 
     this.contractService.updateContract(contract_id, contract_data).pipe(first()).subscribe((res) => {
       console.log('fowardContract::current user: ' + JSON.stringify(res));
+      this.toastr.success('Successfully reverted Contract!', 'Status');
       this.getAllContracts();
     });
   }

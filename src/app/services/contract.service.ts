@@ -11,7 +11,7 @@ import { ThrowStmt } from '@angular/compiler';
 })
 export class ContractService {
 
-  public baseUrl = "http://localhost:5000/api/v1";
+  public baseUrl = "https://contract-approval-api.herokuapp.com/api/v1";//"http://localhost:5000/api/v1";
 
   constructor(private http: HttpClient) { }
 

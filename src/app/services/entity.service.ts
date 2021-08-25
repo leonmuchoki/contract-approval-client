@@ -10,7 +10,7 @@ import { ContractEntity } from '../models/contract';
 })
 export class EntityService {
 
-  public baseUrl = "http://localhost:5000/api/v1";
+  public baseUrl = "https://contract-approval-api.herokuapp.com/api/v1";//"http://localhost:5000/api/v1";
 
   constructor(private http: HttpClient) { }
 

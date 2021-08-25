@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { Packer } from "docx";
 import { saveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 import { Contract, ContractClause } from 'src/app/models/contract';
 import { ContractService } from 'src/app/services/contract.service';
@@ -37,7 +38,8 @@ export class PreviewComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
     ) {
       this.currentContract = this.router.getCurrentNavigation().extras.state;
       console.log('currentContract...' + JSON.stringify(this.currentContract));
@@ -126,6 +128,7 @@ export class PreviewComponent implements OnInit {
   }
   this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
     console.log('fowardContract::current user: ' + JSON.stringify(res));
+    this.toastr.success('Successfully fowarded Contract!', 'Status');
     this.router.navigateByUrl('/contracts');
   });
 }
@@ -151,6 +154,7 @@ export class PreviewComponent implements OnInit {
 
     this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
       console.log('rejectContract::current user: ' + JSON.stringify(res));
+      this.toastr.success('Successfully reverted Contract!', 'Status');
       this.router.navigateByUrl('/contracts');
     });
   }
@@ -161,6 +165,7 @@ export class PreviewComponent implements OnInit {
     contract_data.contract_status_id = ContractStatus.approved;
     this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
       console.log('approveContract::current user: ' + JSON.stringify(res));
+      this.toastr.success('Successfully Approved Contract!', 'Status');
       this.router.navigateByUrl('/contracts');
     });
   }
@@ -171,6 +176,7 @@ export class PreviewComponent implements OnInit {
     contract_data.contract_status_id = ContractStatus.rejected;
     this.contractService.updateContract(this.currentContract.id, contract_data).pipe(first()).subscribe((res) => {
       console.log('rejectContract::current user: ' + JSON.stringify(res));
+      this.toastr.success('Successfully rejected Contract!', 'Status');
       this.router.navigateByUrl('/contracts');
     });
   }

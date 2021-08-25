@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContractService } from 'src/app/services/contract.service';
 import { ContractClause } from 'src/app/models/contract';
 import { AsyncSubject, Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-clause',
@@ -26,7 +27,8 @@ export class CreateContractClauseComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private toastr: ToastrService
   ) {
     this.currentContract = this.router.getCurrentNavigation().extras.state;
     //console.log('currentContract...' + JSON.stringify(this.currentContract));
@@ -83,9 +85,11 @@ export class CreateContractClauseComponent implements OnInit {
       .subscribe(
           res => {
               console.log('create clause res: ' + JSON.stringify(res));
+              this.toastr.success('Successfully created Contract Clause!', 'Status');
               this.router.navigateByUrl('/contracts');
           },
           error => {
+              this.toastr.success('Error creating Contract clauses!', 'Status');
               this.error = error;
           });
   }

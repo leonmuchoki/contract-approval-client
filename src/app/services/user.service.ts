@@ -7,16 +7,16 @@ import { Role } from '../models/role';
   providedIn: 'root'
 })
 export class UserService {
-  public baseUrl = "http://localhost:5000/api/v1/users";
+  public baseUrl = "https://contract-approval-api.herokuapp.com/api/v1";////"http://localhost:5000/api/v1/users";
 
   constructor(private http: HttpClient) { }
 
   getAll() {
-      return this.http.get<User[]>(`${this.baseUrl}/`);
+      return this.http.get<User[]>(`${this.baseUrl}/users/`);
   }
 
   getAllRoles() {
     let url = "http://localhost:5000/api/v1/roles";
-    return this.http.get<Role[]>(`${url}/`);
+    return this.http.get<Role[]>(`${this.baseUrl}/roles/`);
   }
 }

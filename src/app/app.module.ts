@@ -37,6 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { NgxChartsModule }from '@swimlane/ngx-charts';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { NgxChartsModule }from '@swimlane/ngx-charts';
     MatButtonModule,
     LayoutModule,
     EditorModule,
-    NgxChartsModule
+    NgxChartsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
   bootstrap: [AppComponent]

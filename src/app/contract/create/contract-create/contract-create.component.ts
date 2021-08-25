@@ -17,6 +17,7 @@ import { Product } from 'src/app/models/product';
 import { Tender } from 'src/app/models/tender';
 import { ContractStatus } from 'src/app/_helpers/contract_status';
 import { ContractStages } from 'src/app/_helpers/contract_stages';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contract-create',
@@ -53,7 +54,8 @@ export class ContractCreateComponent implements OnInit {
     private entityService: EntityService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
   }
 
@@ -157,13 +159,17 @@ export class ContractCreateComponent implements OnInit {
       contract_data.contract_status_id = ContractStatus.initiated;
       contract_data.contract_stage_id = ContractStages.procurement;
 
+      console.log('submit contract create...' + JSON.stringify(contract_data));
+
       this.contractService.addContract(contract_data)
       .pipe(first())
         .subscribe(
           data => {
-            this.router.navigateByUrl('/dashboard');
+            this.toastr.success('Successfully created Contract!', 'Status');
+            this.router.navigateByUrl('/contracts');
           },
           error => {
+            this.toastr.error('Error creating Contract!', 'Status');
               console.log('contract create: ' + JSON.stringify(error));
               this.error = error;
               this.loading = false;

@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
-  public baseUrl = "http://localhost:5000/api/v1/users";
+  public baseUrl = "https://contract-approval-api.herokuapp.com/api/v1/users";//"http://localhost:5000/api/v1/users";
 
   constructor(private http: HttpClient) {
       this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
