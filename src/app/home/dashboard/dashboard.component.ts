@@ -35,7 +35,13 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService
     ) {
-    this.auth.currentUser.subscribe(x => this.currentUser = x);
+    this.auth.currentUser.subscribe(
+      x => this.currentUser = x,
+      err => {
+        this.auth.logout();
+        this.router.navigateByUrl('/login');
+      }
+    );
   }
 
   ngOnInit() {

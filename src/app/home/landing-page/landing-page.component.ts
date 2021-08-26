@@ -5,6 +5,9 @@ import { Contract } from 'src/app/models/contract';
 import { ContractService } from 'src/app/services/contract.service';
 import { ContractStages } from 'src/app/_helpers/contract_stages';
 import { ContractStatus } from 'src/app/_helpers/contract_status';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing-page',
@@ -12,6 +15,7 @@ import { ContractStatus } from 'src/app/_helpers/contract_status';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit{
+  currentUser: User;
   contracts: Contract[];
   allContracts: number = 0;
   procurementContracts: number = 0;
@@ -78,8 +82,18 @@ export class LandingPageComponent implements OnInit{
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private contractService: ContractService 
-    ) {}
+    private contractService: ContractService,
+    private authService: AuthService,
+    private router: Router 
+    ) {
+      this.authService.currentUser.subscribe(
+        x => this.currentUser = x,
+        err => {
+          this.authService.logout();
+          this.router.navigateByUrl('/login');
+        }
+      );
+    }
 
   ngOnInit() {
     this.contractService.getAllContracts().pipe(first()).subscribe(contracts => {

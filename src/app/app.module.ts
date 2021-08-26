@@ -38,6 +38,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { NgxChartsModule }from '@swimlane/ngx-charts';
 import { ToastrModule } from 'ngx-toastr';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { ToastrModule } from 'ngx-toastr';
     EditorModule,
     NgxChartsModule,
     ToastrModule.forRoot(),
+    FlexLayoutModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
   bootstrap: [AppComponent]

@@ -1,10 +1,12 @@
 <p>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-            <mat-icon>fact_check</mat-icon>
-        </button>
-        <span>Contract Approval</span>
+        <div>
+            <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+                <mat-icon>fact_check</mat-icon>
+            </button>
+            <span>Contract Approval</span>
+        </div>
         <span class="my-spacer"></span>
         <div *ngIf="!currentUser">
             <button (click)="redirectLoginPage()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
@@ -13,9 +15,9 @@
         </div>
         </mat-toolbar-row>
         <mat-toolbar-row *ngIf="currentUser">
-            <span>{{this.currentUser?.user_data.email}} | {{this.currentUser?.user_data.role_name | uppercase}}</span>
+            <span>{{this.currentUser?.user_data?.email}} | {{this.currentUser?.user_data?.role_name | uppercase}}</span>
             <span class="my-spacer"></span>
-            <div style="display: flex; padding: 5px; justify-content: space-between;">
+            <div style="display: flex; padding: 5px; justify-content: space-between;" fxFlex fxLayout   fxHide.xs>
                 <button [routerLink]="['/dashboard']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
                     Dashboard
                 </button>
