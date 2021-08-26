@@ -1,6 +1,11 @@
 <p>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
+        <div fxShow="true" fxHide.gt-sm="true">
+            <button mat-icon-button (click)="sidenav.toggle()">
+              <mat-icon>menu</mat-icon>
+            </button>
+          </div>
         <div>
             <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
                 <mat-icon>fact_check</mat-icon>
@@ -40,4 +45,34 @@
             </div>
         </mat-toolbar-row>
     </mat-toolbar>
+    <mat-sidenav-container fxFlexFill class="example-container">
+
+        <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
+          <div fxLayout="column"  *ngIf="currentUser">
+            <button [routerLink]="['/dashboard']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                Dashboard
+            </button>
+            <button [routerLink]="['/contracts']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                Contracts
+            </button>
+            <button [routerLink]="['/tenders']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                Tenders
+            </button>
+            <button [routerLink]="['/entity']" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                Entity
+            </button>
+            <button (click)="logoutUser()" style="margin: 3px;" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                Logout
+            </button>
+            <div *ngIf="!currentUser">
+                <button (click)="redirectLoginPage()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                    Login
+                </button>
+            </div>
+          </div>
+        </mat-sidenav>
+        <mat-sidenav-content fxFlexFill>
+            <router-outlet></router-outlet>
+          </mat-sidenav-content>
+      </mat-sidenav-container>
   </p>
